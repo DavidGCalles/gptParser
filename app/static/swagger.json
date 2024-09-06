@@ -1,0 +1,226 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "API documentation for the Flask backend",
+      "version": "1.0.0",
+      "title": "Flask API"
+    },
+    "host": "localhost:5000",
+    "basePath": "/api",
+    "tags": [
+      {
+        "name": "ping",
+        "description": "Ping operations"
+      }
+    ],
+    "paths": {
+      "/ping": {
+        "get": {
+          "tags": ["ping"],
+          "summary": "Ping the server",
+          "description": "Returns a pong response",
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "pong"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/receipt_parser": {
+        "post": {
+          "tags": ["receipts"],
+          "summary": "Parse a receipt image",
+          "description": "Parses a receipt image provided in base64 format and returns the extracted data.",
+          "consumes": ["application/json"],
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Base64 encoded image of the receipt",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "base64": {
+                    "type": "string",
+                    "description": "Base64 encoded string of the receipt image",
+                    "example": "iVBORw0KGgoAAAANSUhEUgAA..."
+                  }
+                },
+                "required": ["base64"]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Parsed receipt data",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "result": {
+                    "type": "object",
+                    "description": "Parsed data from the receipt",
+                    "example": {
+                      "total": 123.45,
+                      "items": [
+                        {
+                          "name": "Item 1",
+                          "price": 12.34
+                        },
+                        {
+                          "name": "Item 2",
+                          "price": 45.67
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request - Invalid input",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Invalid base64 input"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/receipts": {
+        "get": {
+          "tags": ["receipts"],
+          "summary": "Get all receipts",
+          "description": "Retrieves a list of all receipts",
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "A list of receipts",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "date": {
+                      "type": "string",
+                      "format": "date",
+                      "example": "2024-09-03"
+                    },
+                    "total": {
+                      "type": "number",
+                      "format": "float",
+                      "example": 46.3
+                    },
+                    "supermarket": {
+                      "type": "string",
+                      "example": "Walmart"
+                    },
+                    "payment_method": {
+                      "type": "string",
+                      "example": "card"
+                    },
+                    "base64_image": {
+                      "type": "string",
+                      "description": "Base64 encoded image of the receipt",
+                      "example": "iVBORw0KGgoAAAANSUhEUgAA..."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": ["receipts"],
+          "summary": "Insert a new receipt",
+          "description": "Inserts a new receipt into the database",
+          "consumes": ["application/json"],
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Receipt data to be added",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2024-09-03"
+                  },
+                  "total": {
+                    "type": "number",
+                    "format": "float",
+                    "example": 46.3
+                  },
+                  "supermarket": {
+                    "type": "string",
+                    "example": "Walmart"
+                  },
+                  "payment_method": {
+                    "type": "string",
+                    "example": "card"
+                  },
+                  "base64_image": {
+                    "type": "string",
+                    "description": "Base64 encoded image of the receipt",
+                    "example": "iVBORw0KGgoAAAANSUhEUgAA..."
+                  }
+                },
+                "required": ["date", "total", "supermarket", "payment_method"]
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Receipt added successfully",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "Receipt added successfully"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Failed to add receipt",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to add receipt"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

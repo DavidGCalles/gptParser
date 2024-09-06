@@ -1,0 +1,7 @@
+flask
+flask-restful
+flask-swagger-ui
+flask-cors
+requests
+openai
+mysql-connector-python
