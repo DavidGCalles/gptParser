@@ -12,6 +12,7 @@ def create_app():
     # Register Blueprints
     from .routes.main import main_bp
     from .routes.receipts import receipts_bp
+    from .routes.items import items_bp
     app.register_blueprint(main_bp, url_prefix='/api')
 
     # Swagger UI setup
@@ -23,5 +24,6 @@ def create_app():
         config={'app_name': "Flask API", 'lang': "en"})
     app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
     app.register_blueprint(receipts_bp, url_prefix='/api/receipts')
+    app.register_blueprint(items_bp, url_prefix='/api/items')
 
     return app
