@@ -1,14 +1,10 @@
 from flask import Blueprint, jsonify, request
 from app.services.ticket_reader import TicketReader
+from app.utils.utils import build_option_headers
 
 main_bp = Blueprint('main', __name__)
 
-def build_option_headers():
-    response = jsonify({"message": "ok"})
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
-    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
-    return response
+
 
 @main_bp.route('/ping', methods=['GET'])
 def ping():

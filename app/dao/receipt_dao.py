@@ -24,16 +24,15 @@ class ReceiptDAO:
 
         cursor = connection.cursor()
         query = """
-        INSERT INTO receipts (user_id,date, total, tax, supermarket, payment_method, base64_image)
+        INSERT INTO receipts (user_id,date, total, supermarket, payment_method, base64_image)
         VALUES (%s, %s, %s, %s, %s, %s)
         """
         values = (
             receipt['user_id'],
             receipt['date'],
             receipt['total'],
-            receipt['tax'],
             receipt['supermarket'],
-            receipt['payment_method'],
+            receipt['payment method'],
             receipt['base64_image']
         )
         cursor.execute(query, values)

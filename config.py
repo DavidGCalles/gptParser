@@ -16,7 +16,7 @@ class Config:
 
     RECEIPT_MODEL_REQUIRED = {
         "supermarket": "string",
-        "date": "string formated as dd/mm/yyyy",
+        "date": "string formated as yyyy-mm-dd",
         "items": "object array",
         "payment method": "cash or card",
         "total": "float"

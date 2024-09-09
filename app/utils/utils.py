@@ -1,5 +1,6 @@
 '''Utils'''
 import base64
+from flask import jsonify
 
 def encode_image(image_path):
     """
@@ -27,3 +28,10 @@ def encode_image(image_path):
     """
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
+
+def build_option_headers():
+    response = jsonify({"message": "ok"})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    return response
