@@ -53,8 +53,9 @@ class TicketReader:
             "Authorization": f"Bearer {Config.API_KEY}"
         }
         self.response = None
+        self.analysis = None
         self.parse_result = None
-    def clean_response(self, raw_string):
+    def clean_response(self, raw_string:str):
         """
         Cleans the raw response string by extracting the relevant JSON content.
 
@@ -66,7 +67,7 @@ class TicketReader:
         """
         self.parse_result = raw_string.split("json",1)[-1].replace("```", "")
         return self.parse_result
-    def parse_image(self, request_data):
+    def parse_image(self, request_data:dict):
         """
         Parses an image from a base64 encoded string using the specified model
         and returns the parsed result.
@@ -101,7 +102,7 @@ class TicketReader:
                     ]
                     }
                 ],
-                "max_tokens": request_data.get("max_tokens", 900)
+                "max_tokens": request_data.get("max_tokens", 2000)
             }
         except KeyError as exc:
             logging.error("No se han proporcionado todos los datos necesarios en requestData")
@@ -110,4 +111,28 @@ class TicketReader:
                          headers=self.headers, json=payload, timeout=300).json()
         response_string = self.response["choices"][0]["message"]["content"]
         return json.loads(self.clean_response(response_string))
-
+    def analyze_receipt(self, request_data:dict, receipt_object:dict):
+        payload = {
+            "model": request_data.get("model","gpt-4o-mini"),
+            "messages": [
+                {
+                "role": "user",
+                "content": [
+                    {
+                    "type": "text",
+                    "text": f"{Config.ANALYZER_PROMPT}"
+                    },
+                    {
+                    "type": "text",
+                    "text": f"{receipt_object}",
+                    }
+                ]
+                }
+            ],
+            "max_tokens": request_data.get("max_tokens", 2000)
+        }
+        self.analysis = requests.post("https://api.openai.com/v1/chat/completions",
+                         headers=self.headers, json=payload, timeout=300).json()
+        response_string = self.analysis["choices"][0]["message"]["content"]
+        print(response_string)
+        return response_string

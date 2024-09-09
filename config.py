@@ -32,3 +32,6 @@ class Config:
     PARSER_PROMPT = "You will receive an image from a supermarket receipt. I need you to return only a json "+\
         "object with the data fitting this model: "+\
         f"{RECEIPT_MODEL_REQUIRED} and items inside of it following this model: {ITEM_MODEL_REQUIRED}"
+    
+    ANALYZER_PROMPT = "You will receive a json object representing a supermarket receipt."+\
+        "You have to split that bill in buying groups depending on the items."

@@ -1,6 +1,7 @@
 -- Create the receipts table if it does not already exist
 CREATE TABLE IF NOT EXISTS receipts (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
     date DATE NOT NULL,
     total DECIMAL(10, 2) NOT NULL,
     supermarket VARCHAR(255),  -- Storing supermarket as a string directly in receipts
@@ -12,6 +13,7 @@ CREATE TABLE IF NOT EXISTS receipts (
 CREATE TABLE IF NOT EXISTS items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     receipt_id INT,
+    user_id VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
     quantity INT NOT NULL,
     unit_price DECIMAL(10, 2) NOT NULL,

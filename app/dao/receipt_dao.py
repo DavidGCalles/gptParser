@@ -17,17 +17,18 @@ class ReceiptDAO:
         return receipts
 
     @staticmethod
-    def insert_receipt(receipt):
+    def insert_receipt(receipt:dict):
         connection = get_db_connection()
         if connection is None:
             return False
 
         cursor = connection.cursor()
         query = """
-        INSERT INTO receipts (date, total, tax, supermarket, payment_method, base64_image)
+        INSERT INTO receipts (user_id,date, total, tax, supermarket, payment_method, base64_image)
         VALUES (%s, %s, %s, %s, %s, %s)
         """
         values = (
+            receipt['user_id'],
             receipt['date'],
             receipt['total'],
             receipt['tax'],
@@ -40,3 +41,16 @@ class ReceiptDAO:
         cursor.close()
         connection.close()
         return True
+    
+    @staticmethod
+    def get_receipt_by_user_id(user_id:int):
+        connection = get_db_connection()
+        if connection is None:
+            return []
+
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute(f"SELECT * FROM receipts WHERE user_id = {user_id}")
+        receipts = cursor.fetchall()
+        cursor.close()
+        connection.close()
+        return receipts
